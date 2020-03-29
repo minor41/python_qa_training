@@ -12,16 +12,25 @@ class TestAddGroup(unittest.TestCase):
     
     def test_add_group(self):
         wd = self.wd
-        wd.get("http://localhost/addressbook/index.php")
-        wd.find_element_by_name("user").click()
-        wd.find_element_by_name("user").clear()
-        wd.find_element_by_name("user").send_keys("admin")
-        wd.find_element_by_name("pass").click()
-        wd.find_element_by_name("pass").clear()
-        wd.find_element_by_name("pass").send_keys("secret")
-        wd.find_element_by_xpath("//input[@value='Login']").click()
-        wd.find_element_by_link_text("groups").click()
-        wd.find_element_by_name("new").click()
+        self.open_home_page(wd)
+        self.login(wd)
+        self.open_groups_page(wd)
+        self.init_group_creation(wd)
+        self.fill_group_page(wd)
+        self.submit_group_creation(wd)
+        self.return_to_group_page(wd)
+        self.logout(wd)
+
+    def logout(self, wd):
+        wd.find_element_by_link_text("Logout").click()
+
+    def return_to_group_page(self, wd):
+        wd.find_element_by_link_text("group page").click()
+
+    def submit_group_creation(self, wd):
+        wd.find_element_by_name("submit").click()
+
+    def fill_group_page(self, wd):
         wd.find_element_by_name("group_name").click()
         wd.find_element_by_name("group_name").clear()
         wd.find_element_by_name("group_name").send_keys("test 123")
@@ -31,10 +40,25 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_name("group_footer").click()
         wd.find_element_by_name("group_footer").clear()
         wd.find_element_by_name("group_footer").send_keys("test 123")
-        wd.find_element_by_name("submit").click()
-        wd.find_element_by_link_text("group page").click()
-        wd.find_element_by_link_text("Logout").click()
-    
+
+    def init_group_creation(self, wd):
+        wd.find_element_by_name("new").click()
+
+    def open_groups_page(self, wd):
+        wd.find_element_by_link_text("groups").click()
+
+    def login(self, wd):
+        wd.find_element_by_name("user").click()
+        wd.find_element_by_name("user").clear()
+        wd.find_element_by_name("user").send_keys("admin")
+        wd.find_element_by_name("pass").click()
+        wd.find_element_by_name("pass").clear()
+        wd.find_element_by_name("pass").send_keys("secret")
+        wd.find_element_by_xpath("//input[@value='Login']").click()
+
+    def open_home_page(self, wd):
+        wd.get("http://localhost/addressbook/index.php")
+
     def is_element_present(self, how, what):
         try: self.wd.find_element(by=how, value=what)
         except NoSuchElementException as e: return False
@@ -44,17 +68,6 @@ class TestAddGroup(unittest.TestCase):
         try: self.wd.switch_to_alert()
         except NoAlertPresentException as e: return False
         return True
-    
-    def close_alert_and_get_its_text(self):
-        try:
-            alert = self.wd.switch_to_alert()
-            alert_text = alert.text
-            if self.accept_next_alert:
-                alert.accept()
-            else:
-                alert.dismiss()
-            return alert_text
-        finally: self.accept_next_alert = True
     
     def tearDown(self):
         self.wd.quit()
