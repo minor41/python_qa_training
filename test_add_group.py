@@ -1,11 +1,8 @@
 # -*- coding: utf-8 -*-
 from selenium import webdriver
-from selenium.webdriver.common.by import By
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
-import unittest, time, re
+import unittest
 
 
 class TestAddGroup(unittest.TestCase):
@@ -14,6 +11,7 @@ class TestAddGroup(unittest.TestCase):
         self.wd.implicitly_wait(30)
 
     def test_add_group(self):
+        success = True
         wd = self.wd
         wd.get("http://localhost/addressbook/index.php")
         wd.find_element_by_name("user").click()
@@ -36,6 +34,7 @@ class TestAddGroup(unittest.TestCase):
         wd.find_element_by_name("submit").click()
         wd.find_element_by_link_text("group page").click()
         wd.find_element_by_link_text("Logout").click()
+        self.assertTrue(success)
     
     def is_element_present(self, how, what):
         try: self.wd.find_element(by=how, value=what)
