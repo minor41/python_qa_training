@@ -4,79 +4,85 @@ from selenium.webdriver.support.ui import Select
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest
+from ContactSuite.personal import PersonalDetails
+from ContactSuite.company import CompanyDetails
+from ContactSuite.numbers import ContactNumbers
+from ContactSuite.emails import ContactEmails
+from ContactSuite.birthday_date import Birthday
+from ContactSuite.anniversary_date import Anniversary
+
 
 
 class TestAddContact(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
-    
+
     def test_add_contact(self):
         wd = self.wd
         self.open_home_page(wd)
         self.login(wd, username="admin", password="secret")
         self.init_contact_creation(wd)
-        self.personal_details(wd, first_name="Tester", middle_name="tes", last_name="Test", nickname="Bravo",
-                              title="Mr.", homepage="www.test.com", notes="How are you ?")
+        self.personal_details(wd, PersonalDetails(first_name="Tester", middle_name="tes", last_name="Test",
+                                                  nickname="Bravo", title="Mr.", homepage="www.test.com",
+                                                  address2="Wherever2", notes="How are you ?"))
         # wd.find_element_by_name("photo").click()
-
-        self.company_details(wd, company="Big Test", address="Wherever")
-        self.contact_numbers(wd, home="555111222", mobile="555222333", work="555333444", fax="555444555", home2="555555777")
-        self.contact_emails(wd, email1="test1@test.test", email2="test2@test.test", email3="test3@test.test")
-        self.birthday_date(wd, bday="10", bday_month="October", bday_year="1988")
-        self.anniversary_date(wd, anniver_day="5", anniver_month="February", anniver_year="2021")
+        self.company_details(wd, CompanyDetails(company_name="Big Test", address="Wherever"))
+        self.contact_numbers(wd, ContactNumbers(home="555111222", mobile="555222333", work="555333444", fax="555444555",
+                             home2="555555777"))
+        self.contact_emails(wd, ContactEmails(email1="test1@test.test", email2="test2@test.test",
+                                              email3="test3@test.test"))
+        self.birthday_date(wd, Birthday(bday="10", bday_month="October", bday_year="1988"))
+        self.anniversary_date(wd, Anniversary(a_day="5", a_month="February", a_year="2021"))
         self.group_selection(wd)
-        self.home_address_details(wd, address2="Wherever2")
         self.submit_contact_creation(wd)
         self.return_to_home_page(wd)
         self.logout(wd)
 
-    def home_address_details(self, wd, address2):
-        wd.find_element_by_name("address2").send_keys(address2)
-
     def group_selection(self, wd):
         wd.find_element_by_xpath("//option[@value='[none]']").click()
 
-    def anniversary_date(self, wd, anniver_day, anniver_month, anniver_year):
+    def anniversary_date(self, wd, anniversary_date):
         wd.find_element_by_name("aday").click()
-        Select(wd.find_element_by_name("aday")).select_by_visible_text(anniver_day)
+        Select(wd.find_element_by_name("aday")).select_by_visible_text(anniversary_date.a_day)
         wd.find_element_by_xpath("(//option[@value='5'])[2]").click()
-        Select(wd.find_element_by_name("amonth")).select_by_visible_text(anniver_month)
+        Select(wd.find_element_by_name("amonth")).select_by_visible_text(anniversary_date.a_month)
         wd.find_element_by_xpath("(//option[@value='February'])[2]").click()
-        wd.find_element_by_name("ayear").send_keys(anniver_year)
+        wd.find_element_by_name("ayear").send_keys(anniversary_date.a_year)
 
-    def birthday_date(self, wd, bday, bday_month, bday_year):
+    def birthday_date(self, wd, birthday_date):
         wd.find_element_by_name("bday").click()
-        Select(wd.find_element_by_name("bday")).select_by_visible_text(bday)
+        Select(wd.find_element_by_name("bday")).select_by_visible_text(birthday_date.bday)
         wd.find_element_by_xpath("//option[@value='10']").click()
-        Select(wd.find_element_by_name("bmonth")).select_by_visible_text(bday_month)
+        Select(wd.find_element_by_name("bmonth")).select_by_visible_text(birthday_date.bday_month)
         wd.find_element_by_xpath("//option[@value='October']").click()
-        wd.find_element_by_name("byear").send_keys(bday_year)
+        wd.find_element_by_name("byear").send_keys(birthday_date.bday_year)
 
-    def contact_emails(self, wd, email1, email2, email3):
-        wd.find_element_by_name("email").send_keys(email1)
-        wd.find_element_by_name("email2").send_keys(email2)
-        wd.find_element_by_name("email3").send_keys(email3)
+    def contact_emails(self, wd, emails):
+        wd.find_element_by_name("email").send_keys(emails.email1)
+        wd.find_element_by_name("email2").send_keys(emails.email2)
+        wd.find_element_by_name("email3").send_keys(emails.email3)
 
-    def contact_numbers(self, wd, home, mobile, work, fax, home2):
-        wd.find_element_by_name("home").send_keys(home)
-        wd.find_element_by_name("mobile").send_keys(mobile)
-        wd.find_element_by_name("work").send_keys(work)
-        wd.find_element_by_name("fax").send_keys(fax)
-        wd.find_element_by_name("phone2").send_keys(home2)
+    def contact_numbers(self, wd, numbers):
+        wd.find_element_by_name("home").send_keys(numbers.home)
+        wd.find_element_by_name("mobile").send_keys(numbers.mobile)
+        wd.find_element_by_name("work").send_keys(numbers.work)
+        wd.find_element_by_name("fax").send_keys(numbers.fax)
+        wd.find_element_by_name("phone2").send_keys(numbers.home2)
 
-    def company_details(self, wd, company, address):
-        wd.find_element_by_name("company").send_keys(company)
-        wd.find_element_by_name("address").send_keys(address)
+    def company_details(self, wd, company):
+        wd.find_element_by_name("company").send_keys(company.company_name)
+        wd.find_element_by_name("address").send_keys(company.address)
 
-    def personal_details(self, wd, first_name, middle_name, last_name, nickname, title, homepage, notes):
-        wd.find_element_by_name("firstname").send_keys(first_name)
-        wd.find_element_by_name("middlename").send_keys(middle_name)
-        wd.find_element_by_name("lastname").send_keys(last_name)
-        wd.find_element_by_name("nickname").send_keys(nickname)
-        wd.find_element_by_name("title").send_keys(title)
-        wd.find_element_by_name("homepage").send_keys(homepage)
-        wd.find_element_by_name("notes").send_keys(notes)
+    def personal_details(self, wd, personal):
+        wd.find_element_by_name("firstname").send_keys(personal.first_name)
+        wd.find_element_by_name("middlename").send_keys(personal.middle_name)
+        wd.find_element_by_name("lastname").send_keys(personal.last_name)
+        wd.find_element_by_name("nickname").send_keys(personal.nickname)
+        wd.find_element_by_name("title").send_keys(personal.title)
+        wd.find_element_by_name("homepage").send_keys(personal.homepage)
+        wd.find_element_by_name("notes").send_keys(personal.notes)
+        wd.find_element_by_name("address2").send_keys(personal.address2)
 
     def init_contact_creation(self, wd):
         wd.find_element_by_link_text("add new").click()
@@ -99,13 +105,17 @@ class TestAddContact(unittest.TestCase):
         wd.get("http://localhost/addressbook/index.php")
 
     def is_element_present(self, how, what):
-        try: self.wd.find_element(by=how, value=what)
-        except NoSuchElementException as e: return False
+        try:
+            self.wd.find_element(by=how, value=what)
+        except NoSuchElementException as e:
+            return False
         return True
-    
+
     def is_alert_present(self):
-        try: self.wd.switch_to_alert()
-        except NoAlertPresentException as e: return False
+        try:
+            self.wd.switch_to_alert()
+        except NoAlertPresentException as e:
+            return False
         return True
 
     def tearDown(self):
