@@ -3,7 +3,7 @@ from selenium import webdriver
 from selenium.common.exceptions import NoSuchElementException
 from selenium.common.exceptions import NoAlertPresentException
 import unittest
-from group import Group
+from GroupSuite.group import Group
 
 
 class TestAddGroup(unittest.TestCase):
