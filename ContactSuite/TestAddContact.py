@@ -12,7 +12,6 @@ from ContactSuite.birthday_date import Birthday
 from ContactSuite.anniversary_date import Anniversary
 
 
-
 class TestAddContact(unittest.TestCase):
     def setUp(self):
         self.wd = webdriver.Firefox()
@@ -26,7 +25,6 @@ class TestAddContact(unittest.TestCase):
         self.personal_details(wd, PersonalDetails(first_name="Tester", middle_name="tes", last_name="Test",
                                                   nickname="Bravo", title="Mr.", homepage="www.test.com",
                                                   address2="Wherever2", notes="How are you ?"))
-        # wd.find_element_by_name("photo").click()
         self.company_details(wd, CompanyDetails(company_name="Big Test", address="Wherever"))
         self.contact_numbers(wd, ContactNumbers(home="555111222", mobile="555222333", work="555333444", fax="555444555",
                              home2="555555777"))
@@ -39,23 +37,43 @@ class TestAddContact(unittest.TestCase):
         self.return_to_home_page(wd)
         self.logout(wd)
 
+    def test_add_contact_with_basic_info(self):
+        wd = self.wd
+        self.open_home_page(wd)
+        self.login(wd, username="admin", password="secret")
+        self.init_contact_creation(wd)
+        self.personal_details(wd, PersonalDetails(first_name="Tester123", middle_name="", last_name="Test321",
+                                                  nickname="Gamma", title="", homepage="",
+                                                  address2="", notes=""))
+        self.company_details(wd, CompanyDetails(company_name="", address=""))
+        self.contact_numbers(wd, ContactNumbers(home="", mobile="555222333", work="555333444", fax="",
+                             home2=""))
+        self.contact_emails(wd, ContactEmails(email1="test1@test.test", email2="",
+                                              email3=""))
+        self.birthday_date(wd, Birthday(bday="", bday_month="-", bday_year=""))
+        self.anniversary_date(wd, Anniversary(a_day="", a_month="-", a_year=""))
+        self.group_selection(wd)
+        self.submit_contact_creation(wd)
+        self.return_to_home_page(wd)
+        self.logout(wd)
+
     def group_selection(self, wd):
         wd.find_element_by_xpath("//option[@value='[none]']").click()
 
     def anniversary_date(self, wd, anniversary_date):
         wd.find_element_by_name("aday").click()
         Select(wd.find_element_by_name("aday")).select_by_visible_text(anniversary_date.a_day)
-        wd.find_element_by_xpath("(//option[@value='5'])[2]").click()
+        wd.find_element_by_name("amonth").click()
         Select(wd.find_element_by_name("amonth")).select_by_visible_text(anniversary_date.a_month)
-        wd.find_element_by_xpath("(//option[@value='February'])[2]").click()
+        wd.find_element_by_name("ayear").click()
         wd.find_element_by_name("ayear").send_keys(anniversary_date.a_year)
 
     def birthday_date(self, wd, birthday_date):
         wd.find_element_by_name("bday").click()
         Select(wd.find_element_by_name("bday")).select_by_visible_text(birthday_date.bday)
-        wd.find_element_by_xpath("//option[@value='10']").click()
+        wd.find_element_by_name("bmonth").click()
         Select(wd.find_element_by_name("bmonth")).select_by_visible_text(birthday_date.bday_month)
-        wd.find_element_by_xpath("//option[@value='October']").click()
+        wd.find_element_by_name("byear").click()
         wd.find_element_by_name("byear").send_keys(birthday_date.bday_year)
 
     def contact_emails(self, wd, emails):
