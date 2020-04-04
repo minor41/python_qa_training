@@ -56,10 +56,6 @@ class ApplicationContact:
         wd = self.wd
         wd.find_element_by_link_text("home page").click()
 
-    def submit_contact_creation(self):
-        wd = self.wd
-        wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
-
     def login(self, username, password):
         wd = self.wd
         self.open_home_page()
