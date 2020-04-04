@@ -1,3 +1,4 @@
+from time import sleep
 
 
 class SessionHelper:
@@ -19,4 +20,6 @@ class SessionHelper:
     def logout(self):
         wd = self.app.wd
         wd.find_element_by_xpath("//a[@onclick='document.logout.submit();']").click()
+        sleep(1)
+
 
