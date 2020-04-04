@@ -1,5 +1,6 @@
 from selenium import webdriver
 from selenium.webdriver.support.select import Select
+from fixture.session import SessionHelper
 
 
 class ApplicationContact:
@@ -7,6 +8,7 @@ class ApplicationContact:
     def __init__(self):
         self.wd = webdriver.Firefox()
         self.wd.implicitly_wait(30)
+        self.session = SessionHelper(self)
 
     def contact_creation(self, contact_details):
         wd = self.wd
@@ -48,20 +50,9 @@ class ApplicationContact:
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         self.return_to_home_page()
 
-    def logout(self):
-        wd = self.wd
-        wd.find_element_by_link_text("Logout").click()
-
     def return_to_home_page(self):
         wd = self.wd
         wd.find_element_by_link_text("home page").click()
-
-    def login(self, username, password):
-        wd = self.wd
-        self.open_home_page()
-        wd.find_element_by_name("user").send_keys(username)
-        wd.find_element_by_name("pass").send_keys(password)
-        wd.find_element_by_xpath("//input[@value='Login']").click()
 
     def open_home_page(self):
         wd = self.wd
