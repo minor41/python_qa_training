@@ -73,7 +73,7 @@ class ContactHelper:
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to.alert.accept()
 
-    def create(self, contact_details):
+    def create_contact(self, contact_details):
         wd = self.app.wd
         # init contact creation
         wd.find_element_by_link_text("add new").click()

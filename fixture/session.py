@@ -20,6 +20,5 @@ class SessionHelper:
     def logout(self):
         wd = self.app.wd
         wd.find_element_by_xpath("//a[@onclick='document.logout.submit();']").click()
-        sleep(1)
-
+        wd.delete_all_cookies()
 
