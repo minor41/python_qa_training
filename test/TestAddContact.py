@@ -11,7 +11,6 @@ def test_add_contact(app):
                                email3="test3@test.test", bday="10", bmonth="October",
                                byear="1988", aday="5", amonth="February", ayear="2021",
                                phone2="555555777", address2="Wherever2", notes="How are you ?"))
-    app.session.logout()
 
 
 def test_add_contact_with_basic_info(app):
@@ -23,5 +22,4 @@ def test_add_contact_with_basic_info(app):
                                email3="", bday="", bmonth="-",
                                byear="", aday="", amonth="-", ayear="",
                                phone2="", address2="", notes=""))
-    app.session.logout()
 
