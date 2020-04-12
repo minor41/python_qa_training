@@ -1,4 +1,6 @@
 # -*- coding: utf-8 -*-
+from time import sleep
+
 from model.group import Group
 
 
