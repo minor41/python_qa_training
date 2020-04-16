@@ -14,7 +14,7 @@ class ContactHelper:
         self.fill_contact_form(contact_edit)
         # submit contact edition
         wd.find_element_by_name("update").click()
-        self.open_to_home_page()
+        self.return_to_home_page()
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -31,7 +31,7 @@ class ContactHelper:
         self.fill_contact_form(contact_details)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
-        self.open_to_home_page()
+        self.return_to_home_page()
 
     def fill_contact_form(self, contact_details):
         wd = self.app.wd
@@ -82,12 +82,12 @@ class ContactHelper:
             wd.find_element_by_name(field_name).clear()
             wd.find_element_by_name(field_name).send_keys(text)
 
-    def open_to_home_page(self):
+    def return_to_home_page(self):
         wd = self.app.wd
         if not wd.current_url.endswith("/index.php"):
-            wd.find_element_by_link_text("home page").click()
+            wd.find_element_by_link_text("home").click()
 
     def count_contact(self):
         wd = self.app.wd
-        self.open_to_home_page()
+        self.return_to_home_page()
         return len(wd.find_elements_by_name("selected[]"))
