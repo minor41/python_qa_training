@@ -1,5 +1,9 @@
+from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException
+from selenium.webdriver.common.by import By
 from selenium.webdriver.support.select import Select
+from selenium.webdriver.support.wait import WebDriverWait
+from model.contact import Contact
 
 
 class ContactHelper:
@@ -15,6 +19,7 @@ class ContactHelper:
         # submit contact edition
         wd.find_element_by_name("update").click()
         self.return_to_home_page()
+        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
 
     def delete_first_contact(self):
         wd = self.app.wd
@@ -23,6 +28,8 @@ class ContactHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to.alert.accept()
+        self.return_to_home_page()
+        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
 
     def create_contact(self, contact_details):
         wd = self.app.wd
@@ -32,6 +39,7 @@ class ContactHelper:
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
         self.return_to_home_page()
+        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
 
     def fill_contact_form(self, contact_details):
         wd = self.app.wd
@@ -84,10 +92,20 @@ class ContactHelper:
 
     def return_to_home_page(self):
         wd = self.app.wd
-        if not wd.current_url.endswith("/index.php"):
-            wd.find_element_by_link_text("home").click()
+        # if not wd.current_url.endswith("/index.php"):
+        wd.find_element_by_link_text("home").click()
 
     def count_contact(self):
         wd = self.app.wd
-        self.return_to_home_page()
+        # self.return_to_home_page()
         return len(wd.find_elements_by_name("selected[]"))
+
+    def get_contact_list(self):
+        wd = self.app.wd
+        contacts = []
+        for element in wd.find_elements_by_name("entry"):
+            text = element.text
+            contact_id = element.find_element_by_name("selected[]").get_attribute("value")
+            contacts.append(Contact(first_name=text, contact_id=contact_id))
+        return contacts
+

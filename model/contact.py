@@ -3,7 +3,7 @@ class Contact:
     def __init__(self, first_name=None, middle_name=None, last_name=None, nickname=None, title=None, company_name=None,
                  address=None, home=None, mobile=None, work=None,fax=None, email=None, email2=None, email3=None,
                  homepage=None, bday=None, bmonth=None, byear=None, aday=None, amonth=None, ayear=None,
-                 address2=None, phone2=None, notes=None):
+                 address2=None, phone2=None, notes=None, contact_id=None):
         self.first_name = first_name
         self.middle_name = middle_name
         self.last_name = last_name
@@ -28,3 +28,4 @@ class Contact:
         self.address2 = address2
         self.phone2 = phone2
         self.notes = notes
+        self.contact_id = contact_id
