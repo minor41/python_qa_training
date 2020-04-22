@@ -13,24 +13,24 @@ def test_add_contact(app):
                       byear="1988", aday="5", amonth="February", ayear="2021",
                       phone2="555555777", address2="Wherever2", notes="How are you ?")
     app.contact.create_contact(contact)
+    assert len(old_contacts) + 1 == app.contact.count_contact()
     new_contacts = app.contact.get_contact_list()
-    assert len(old_contacts) + 1 == len(new_contacts)
     old_contacts.append(contact)
     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
 
 
-def test_add_contact_with_basic_info(app):
-    old_contacts = app.contact.get_contact_list()
-    contact = Contact(first_name="Trick", middle_name="", last_name="Truck",
-                      nickname="", title="", company_name="Big MO",
-                      address="", homepage="www.345.com", home="",
-                      mobile="555222333", work="", fax="",
-                      email="test1@test.test", email2="",
-                      email3="", bday="", bmonth="-",
-                      byear="", aday="", amonth="-", ayear="",
-                      phone2="", address2="", notes="")
-    app.contact.create_contact(contact)
-    new_contacts = app.contact.get_contact_list()
-    assert len(old_contacts) + 1 == len(new_contacts)
-    old_contacts.append(contact)
-    assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
+# def test_add_contact_with_basic_info(app):
+#     old_contacts = app.contact.get_contact_list()
+#     contact = Contact(first_name="Trick", middle_name="", last_name="Truck",
+#                       nickname="", title="", company_name="Big MO",
+#                       address="", homepage="www.345.com", home="",
+#                       mobile="555222333", work="", fax="",
+#                       email="test1@test.test", email2="",
+#                       email3="", bday="", bmonth="-",
+#                       byear="", aday="", amonth="-", ayear="",
+#                       phone2="", address2="", notes="")
+#     app.contact.create_contact(contact)
+#     new_contacts = app.contact.get_contact_list()
+#     assert len(old_contacts) + 1 == len(new_contacts)
+#     old_contacts.append(contact)
+#     assert sorted(old_contacts, key=Contact.id_or_max) == sorted(new_contacts, key=Contact.id_or_max)
