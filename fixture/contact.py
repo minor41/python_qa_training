@@ -11,10 +11,13 @@ class ContactHelper:
     def __init__(self, app):
         self.app = app
 
-    def edit_first_contact(self, contact_edit):
+    def edit_first_contact(self):
+        self.edit_contact_by_index(0)
+
+    def edit_contact_by_index(self, index, contact_edit):
         wd = self.app.wd
         # select first contact to edit
-        wd.find_element_by_xpath("//img[@alt='Edit']").click()
+        wd.find_elements_by_xpath("//img[@alt='Edit']")[index].click()
         self.fill_contact_form(contact_edit)
         # submit contact edition
         wd.find_element_by_name("update").click()
@@ -23,9 +26,12 @@ class ContactHelper:
         WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
 
     def delete_first_contact(self):
+        self.delete_contact_by_index(0)
+
+    def delete_contact_by_index(self, index):
         wd = self.app.wd
-        # select first contact
-        wd.find_element_by_name("selected[]").click()
+        # select random contact
+        wd.find_elements_by_name("selected[]")[index].click()
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to.alert.accept()
