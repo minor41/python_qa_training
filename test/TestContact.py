@@ -1,4 +1,6 @@
 import re
+from random import randrange
+
 from model.contact import Contact
 
 
@@ -13,8 +15,10 @@ def test_random_contact_on_home_page(app):
                           byear="", aday="", amonth="-", ayear="",
                           phone2="", address2="", notes="")
         app.contact.create_contact(contact)
-    contact_from_homepage = app.contact.get_contact_list()[0]
-    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(0)
+    all_contacts = app.contact.get_contact_list()
+    index = randrange(len(all_contacts))
+    contact_from_homepage = app.contact.get_contact_list()[index]
+    contact_from_edit_page = app.contact.get_contact_info_from_edit_page(index)
     assert contact_from_homepage.first_name == contact_from_edit_page.first_name
     assert contact_from_homepage.last_name == contact_from_edit_page.last_name
     assert contact_from_homepage.address == contact_from_edit_page.address
