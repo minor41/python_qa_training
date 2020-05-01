@@ -1,3 +1,5 @@
+from time import sleep
+
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -52,6 +54,7 @@ class ContactHelper:
         # submit deletion
         wd.find_element_by_xpath("//input[@value='Delete']").click()
         wd.switch_to.alert.accept()
+        sleep(1)
         self.open_home_page()
         self.contact_cache = None
         WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
@@ -63,6 +66,7 @@ class ContactHelper:
         self.fill_contact_form(contact_details)
         # submit contact creation
         wd.find_element_by_xpath("(//input[@name='submit'])[2]").click()
+        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
         self.open_home_page()
         self.contact_cache = None
         WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
@@ -123,7 +127,6 @@ class ContactHelper:
 
     def count_contact(self):
         wd = self.app.wd
-        # self.return_to_home_page()
         return len(wd.find_elements_by_name("selected[]"))
 
     contact_cache = None
