@@ -8,9 +8,9 @@ class Application:
 
     def __init__(self, browser, base_url):
         if browser == "firefox":
-            self.wd = webdriver.Firefox(executable_path='/usr/local/bin')
+            self.wd = webdriver.Firefox(executable_path='/usr/local/bin/geckodriver')
         elif browser == "chrome":
-            self.wd = webdriver.Chrome()
+            self.wd = webdriver.Chrome(executable_path='/usr/local/bin/chromedriver')
         elif browser == "safari":
             self.wd = webdriver.Safari()
         else:
