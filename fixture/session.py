@@ -20,7 +20,6 @@ class SessionHelper:
         wd.delete_all_cookies()
 
     def ensure_logout(self):
-        wd = self.app.wd
         if self.is_logged_in():
             self.logout()
 
