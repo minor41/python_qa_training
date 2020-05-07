@@ -14,7 +14,7 @@ def random_string(prefix, maxlen):
     return prefix + "".join([random.choice(symbols) for i in range(random.randrange(maxlen))])
 
 
-test_data = [Group(name="", header="", footer="")] + \
+test_data_group = [Group(name="", header="", footer="")] + \
             [Group(random_string("name", 10), random_string("header", 20), random_string("footer", 20))
              for i in range(5)]
 
