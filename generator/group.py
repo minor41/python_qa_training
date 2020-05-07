@@ -1,12 +1,26 @@
+import json
+import os
 import random
 import string
+import getopt
+import sys
 from model.group import Group
 
 
-constant = [
-    Group(name="name1", header="header1", footer="footer1"),
-    Group(name="name2", header="header2", footer="footer2")
-]
+try:
+    opts, args = getopt.getopt(sys.argv[1:], "n:f:", ["number of groups", "file"])
+except getopt.GetoptError as err:
+    getopt.usage()
+    sys.exit(2)
+
+n = 5
+f = "data/groups.json"
+
+for o, a in opts:
+    if o == "-n":
+        n = int(a)
+    elif o == "-f":
+        f = a
 
 
 def random_string(prefix, maxlen):
@@ -16,7 +30,12 @@ def random_string(prefix, maxlen):
 
 test_data_group = [Group(name="", header="", footer="")] + \
             [Group(random_string("name", 10), random_string("header", 20), random_string("footer", 20))
-             for i in range(5)]
+             for i in range(n)]
+
+file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
+
+with open(file, "w") as out:
+    out.write(json.dumps(test_data_group, default=lambda x: x.__dict__, indent=2))
 
 # all possible test cases
 # test_data = [Group(name=name, header=header, footer=footer)
