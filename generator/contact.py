@@ -1,4 +1,4 @@
-import json
+import jsonpickle
 import os
 import random
 import string
@@ -13,7 +13,7 @@ except getopt.GetoptError as err:
     getopt.usage()
     sys.exit(2)
 
-n = 5
+n = 2
 f = "data/contacts.json"
 
 for o, a in opts:
@@ -43,10 +43,10 @@ def random_month(prefix):
     return random.choice(months)
 
 
-test_data_contact = [Contact(first_name="", middle_name="", last_name="", nickname="", title="", company_name="",
-                             address="", home_phone="", mobile="", work="", fax="", email="", email2="", email3="",
-                             homepage="", bday="", bmonth="-", byear="", aday="", amonth="-", ayear="", phone2="",
-                             address2="", notes="")] + \
+testdata = [Contact(first_name="", middle_name="", last_name="", nickname="", title="", company_name="",
+                    address="", home_phone="", mobile="", work="", fax="", email="", email2="", email3="",
+                    homepage="", bday="", bmonth="-", byear="", aday="", amonth="-", ayear="", phone2="",
+                    address2="", notes="")] + \
             [Contact(random_string("first_name", 10), random_string("middle_name", 10), random_string("last_name", 20),
                      random_string("nickname", 10), random_string("title", 5), random_string("company_name", 20),
                      random_string("address", 20),random_string("home_phone", 10), random_string("mobile", 10),
@@ -60,4 +60,5 @@ test_data_contact = [Contact(first_name="", middle_name="", last_name="", nickna
 file = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", f)
 
 with open(file, "w") as out:
-    out.write(json.dumps(test_data_contact, default=lambda x: x.__dict__, indent=2))
+    jsonpickle.set_encoder_options("json", indent=2)
+    out.write(jsonpickle.encode(testdata))
