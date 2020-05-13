@@ -59,6 +59,18 @@ class ContactHelper:
         self.contact_cache = None
         WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
 
+    def delete_contact_by_id(self, id):
+        wd = self.app.wd
+        # select random contact
+        wd.find_element_by_css_selector("input[value='%s']" % id).click()
+        # submit deletion
+        wd.find_element_by_xpath("//input[@value='Delete']").click()
+        wd.switch_to.alert.accept()
+        sleep(1)
+        self.open_home_page()
+        self.contact_cache = None
+        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
+
     def create_contact(self, contact_details):
         wd = self.app.wd
         # init contact creation
