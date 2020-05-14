@@ -28,6 +28,17 @@ class ContactHelper:
         self.contact_cache = None
         WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
 
+    def edit_contact_by_id(self, id, contact_edit):
+        wd = self.app.wd
+        # select contact to edit
+        wd.find_element_by_xpath("//input[@value='%s']//following::td[7]" % id).click()
+        self.fill_contact_form(contact_edit)
+        # submit contact edition
+        wd.find_element_by_name("update").click()
+        self.open_home_page()
+        self.contact_cache = None
+        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
+
     def open_contact_edit_by_index(self, index):
         wd = self.app.wd
         # select contact to view
