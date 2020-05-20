@@ -1,6 +1,12 @@
-from fixture.db import DbFixture
+# from fixture.db import DbFixture
+from fixture.orm import ORMFixture
 
-db = DbFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+
+# db = DbFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+from model.group import Group
+
+db = ORMFixture(host="127.0.0.1", name="addressbook", user="root", password="")
+
 
 # try:
 #     groups = db.get_group_list()
@@ -11,10 +17,18 @@ db = DbFixture(host="127.0.0.1", name="addressbook", user="root", password="")
 #     db.destroy()
 
 
+# try:
+#     contacts = db.get_contact_list()
+#     for contact in contacts:
+#         print(contact)
+#     print(len(contacts))
+# finally:
+#     db.destroy()
+
 try:
-    contacts = db.get_contact_list()
-    for contact in contacts:
-        print(contact)
-    print(len(contacts))
+    l = db.get_contacts_not_in_group(Group(group_id='228'))
+    for item in l:
+        print(item)
+    print(len(l))
 finally:
-    db.destroy()
+    pass # db.destroy()
