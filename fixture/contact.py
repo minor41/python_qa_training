@@ -204,8 +204,7 @@ class ContactHelper:
         wd.find_element_by_css_selector("input[value='%s']" % contact_name).click()
         # select random group from dropdown
         wd.find_element_by_name("to_group").click()
-        # wd.find_element_by_css_selector("option[value='%s']" % group_name).click()
-        wd.find_elements_by_name("to_group")[group_name].click()
+        wd.find_element_by_css_selector("option[value='%s']" % group_name).click()
         # confirm selection
         wd.find_element_by_name("add").click()
         self.open_home_page()
