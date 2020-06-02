@@ -41,7 +41,7 @@ class DbFixture:
             cursor.close()
         return list_contact
 
-    def get_email_list(self):
+    def get_all_email_list(self):
         list_all_emails = []
         cursor = self.connection.cursor()
         try:
@@ -49,6 +49,19 @@ class DbFixture:
             for row in cursor:
                 (id, email, email2, email3) = row
                 list_all_emails.append(Contact(contact_id=str(id), email=email, email2=email2, email3=email3))
+        finally:
+            cursor.close()
+        return list_all_emails
+
+    def get_all_phone_list(self):
+        list_all_emails = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select id, home, mobile, work, fax from addressbook where deprecated='0000-00-00 00:00:00'")
+            for row in cursor:
+                (id, home, mobile, work, fax) = row
+                list_all_emails.append(Contact(contact_id=str(id), home_phone=home, mobile=mobile,
+                                               work=work, fax=fax))
         finally:
             cursor.close()
         return list_all_emails

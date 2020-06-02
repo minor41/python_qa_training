@@ -213,7 +213,6 @@ class ContactHelper:
         contact_in_groups = DbFixture.get_contacts_in_group_list
         if contact_in_groups is not None:
             wd.find_element_by_xpath("//input[@value='%s']//following::td[6]" % contact_id).click()
-            sleep(2)
             wd.find_element_by_xpath("//i/a").click()
             sleep(1)
             wd.find_element_by_css_selector("input[id='%s']" % contact_id).click()
