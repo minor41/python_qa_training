@@ -1,5 +1,5 @@
 from time import sleep
-
+from fixture.db import  DbFixture
 from selenium.webdriver.support import expected_conditions as ec
 from selenium.common.exceptions import NoSuchElementException
 from selenium.webdriver.common.by import By
@@ -198,18 +198,39 @@ class ContactHelper:
         phone2 = re.search("P: (.*)", text).group(1)
         return Contact(home_phone=home_phone, mobile=mobile, work=work, phone2=phone2)
 
-    def add_contact_for_group(self, contact_name, group_name):
+    def add_contact_for_group(self, contact_id, group_id):
         wd = self.app.wd
         # select random contact
-        wd.find_element_by_css_selector("input[value='%s']" % contact_name).click()
+        wd.find_element_by_css_selector("input[id='%s']" % contact_id).click()
         # select random group from dropdown
         wd.find_element_by_name("to_group").click()
-        wd.find_element_by_css_selector("option[value='%s']" % group_name).click()
-        # confirm selection
-        wd.find_element_by_name("add").click()
-        self.open_home_page()
+        wd.find_element_by_xpath("//option[@value='%s']//following::input[@value='Add to']" % group_id).click()
         self.contact_cache = None
-        WebDriverWait(wd, 10).until(ec.visibility_of_element_located((By.ID, "search_count")))
+
+    def delete_contact_from_group(self, contact_id, group_id):
+        wd = self.app.wd
+        # check if contact is in the group and delete it
+        contact_in_groups = DbFixture.get_contacts_in_group_list
+        if contact_in_groups is not None:
+            wd.find_element_by_xpath("//input[@value='%s']//following::td[6]" % contact_id).click()
+            sleep(2)
+            wd.find_element_by_xpath("//i/a").click()
+            sleep(1)
+            wd.find_element_by_css_selector("input[id='%s']" % contact_id).click()
+            wd.find_element_by_name("remove").click()
+            self.contact_cache = None
+        else:
+            self.add_contact_for_group(contact_id, group_id)
+
+
+
+
+
+
+
+
+
+
 
 
 

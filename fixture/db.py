@@ -29,15 +29,29 @@ class DbFixture:
         cursor = self.connection.cursor()
         try:
             cursor.execute("select id, firstname, lastname, address, email, email2, email3, home, mobile, work, "
-                           "fax from addressbook where deprecated='0000-00-00 00:00:00'")
+                           "fax, homepage, notes, address2 from addressbook where deprecated='0000-00-00 00:00:00'")
             for row in cursor:
-                (id, firstname, lastname, address, email, email2, email3, home, mobile, work, fax) = row
+                (id, firstname, lastname, address, email, email2, email3, home, mobile, work, fax, homepage, notes,
+                 address2) = row
                 list_contact.append(Contact(contact_id=str(id), first_name=firstname, last_name=lastname,
                                             address=address, email=email, email2=email2, email3=email3,
-                                            home_phone=home, mobile=mobile, work=work, fax=fax))
+                                            home_phone=home, mobile=mobile, work=work, fax=fax,
+                                            homepage=homepage, notes=notes, address2=address2))
         finally:
             cursor.close()
         return list_contact
+
+    def get_email_list(self):
+        list_all_emails = []
+        cursor = self.connection.cursor()
+        try:
+            cursor.execute("select id, email, email2, email3 from addressbook where deprecated='0000-00-00 00:00:00'")
+            for row in cursor:
+                (id, email, email2, email3) = row
+                list_all_emails.append(Contact(contact_id=str(id), email=email, email2=email2, email3=email3))
+        finally:
+            cursor.close()
+        return list_all_emails
 
     def get_contacts_in_group_list(self):
         list = []
@@ -46,7 +60,7 @@ class DbFixture:
             cursor.execute("select id, group_id from address_in_groups")
             for row in cursor:
                 (id, group_id) = row
-                list.append((Contact(contact_id=str(id)), Group(group_id=str(group_id))))
+                list.append((Contact(contact_id=id), Group(group_id=group_id)))
         finally:
             cursor.close()
         return list
